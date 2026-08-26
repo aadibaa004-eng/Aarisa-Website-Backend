@@ -252,6 +252,162 @@ Deletes a gallery item.
 
 ---
 
+## Gallery Categories
+
+Reusable gallery category system with visibility control. Categories group images
+(e.g. Achievements, Events, Awards). Disabled categories remain fully manageable
+by admins but are excluded from public listings.
+
+### GET /api/gallery/categories
+
+Lists categories with image counts. Public callers receive **active categories only**;
+authenticated admins receive all. Slug is auto-generated and unique; duplicate
+names are rejected (case-insensitive).
+
+**Query Params**
+| Param | Values | Description |
+|---|---|---|
+| is_active | `true` \| `false` | Filter by status (admin only — ignored for public callers who always get active) |
+
+**Response 200**
+```json
+{
+  "success": true,
+  "message": "Gallery categories retrieved successfully",
+  "data": [
+    {
+      "_id": "...",
+      "name": "Achievements",
+      "slug": "achievements",
+      "isActive": true,
+      "imageCount": 12,
+      "createdAt": "...",
+      "updatedAt": "..."
+    }
+  ]
+}
+```
+
+### POST /api/gallery/categories 🔒
+
+**Request Body**
+```json
+{
+  "name": "Achievements",
+  "is_active": true
+}
+```
+`isActive` (camelCase) is also accepted. Status defaults to enabled.
+
+**Errors**: `409` duplicate name/slug · `400` validation failure
+
+---
+
+### GET /api/gallery/categories/:id
+
+Returns a single category with `imageCount`. Add `?include_images=true` to embed
+the full image list. Disabled categories are returned so admins can manage them.
+
+---
+
+### PUT /api/gallery/categories/:id 🔒
+
+Updates name and/or status. Renaming regenerates the slug automatically while
+preserving uniqueness (suffix `-2`, `-3`, … on collision).
+
+```json
+{ "name": "Student Activities", "isActive": false }
+```
+
+---
+
+### PATCH /api/gallery/categories/:id/status 🔒
+
+Enables or disables a category. Images are preserved when disabled.
+
+```json
+{ "is_active": false }
+```
+
+---
+
+### DELETE /api/gallery/categories/:id 🔒
+
+Deletes the category, all of its image records, and their Cloudinary assets
+(cascade delete).
+
+**Response**
+```json
+{ "success": true, "data": { "deletedImages": 12 } }
+```
+
+---
+
+### GET /api/gallery/categories/:id/images
+
+Lists all images in a category, newest first.
+
+---
+
+### POST /api/gallery/categories/:id/images 🔒
+
+Uploads one or more images to a category. Files go to Cloudinary under
+`arisa-nutrition/gallery/<category-slug>` and records are stored in `gallery_images`.
+
+Each image can carry an optional `title` (≤150 chars) and `description`
+(≤1000 chars).
+
+**Request**: `multipart/form-data`
+| Field | Description |
+|---|---|
+| images | One or more image files (multiple upload) |
+| image | Single image file (alternative field name) |
+| metadata | Optional JSON array aligned with file order: `[{"title": "...", "description": "..."}]` |
+| title | Optional — applied to all uploaded files when `metadata` is absent |
+| description | Optional — applied to all uploaded files when `metadata` is absent |
+
+Constraints: JPEG/PNG/WEBP/GIF, max 5 MB each, max 20 files per request.
+Metadata is optional; uploads without any text fields behave as before.
+
+**Response 201**: array of created image records (`_id`, `categoryId`, `imageUrl`, `publicId`, `title`, `description`, `createdAt`)
+
+---
+
+### GET /api/gallery/images
+
+Lists all images that are **not** assigned to any category, newest first.
+
+---
+
+### POST /api/gallery/images 🔒
+
+Uploads one or more images **without a category**. Same multipart contract as
+the per-category upload (`images`/`image` files, optional `metadata` array or
+shared `title`/`description`). Files go to Cloudinary under
+`arisa-nutrition/gallery/uncategorized`.
+
+**Response 201**: array of created image records with `categoryId: null`.
+
+---
+
+### PATCH /api/gallery/images/:id 🔒
+
+Updates an image's title and/or description after upload.
+
+```json
+{ "title": "Award Ceremony", "description": "Best college award 2026" }
+```
+
+At least one field must be provided. Image URL and category cannot be changed.
+
+---
+
+### DELETE /api/gallery/images/:id 🔒
+
+Deletes a single image record and its Cloudinary asset.
+
+---
+
 ## Contact
 
 ### POST /api/contact

@@ -14,6 +14,16 @@ const PUBLIC_PATTERNS: Array<{ methods: string[]; pattern: RegExp }> = [
   { methods: ["GET", "HEAD"], pattern: /^\/api\/reviews$/ },
   // Public read access to gallery
   { methods: ["GET", "HEAD"], pattern: /^\/api\/gallery$/ },
+  // Public read access to gallery categories (list + single) and their images.
+  // Mutations (POST/PUT/PATCH/DELETE) remain protected.
+  {
+    methods: ["GET", "HEAD"],
+    pattern: /^\/api\/gallery\/categories(\/[^/]+)?(\/images)?$/,
+  },
+  // Public read access to uncategorized gallery images.
+  // Mutations (POST) and per-image updates (PATCH/DELETE /api/gallery/images/:id)
+  // remain protected.
+  { methods: ["GET", "HEAD"], pattern: /^\/api\/gallery\/images$/ },
   // Public contact form submission
   { methods: ["POST"], pattern: /^\/api\/contact$/ },
 ];

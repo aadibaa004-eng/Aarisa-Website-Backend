@@ -75,6 +75,38 @@ Use these to seed your database for local development or testing.
 
 ---
 
+## gallery_categories
+
+```json
+{
+  "_id": { "$oid": "66f1a2b3c4d5e6f7a8b9c0e1" },
+  "name": "Achievements",
+  "slug": "achievements",
+  "isActive": true,
+  "createdAt": { "$date": "2025-07-01T09:00:00.000Z" },
+  "updatedAt": { "$date": "2025-07-01T09:00:00.000Z" }
+}
+```
+
+---
+
+## gallery_images
+
+```json
+{
+  "_id": { "$oid": "66f1a2b3c4d5e6f7a8b9c0e2" },
+  "categoryId": { "$oid": "66f1a2b3c4d5e6f7a8b9c0e1" },
+  "imageUrl": "https://res.cloudinary.com/your-cloud/image/upload/v1/arisa-nutrition/gallery/achievements/award1.jpg",
+  "publicId": "arisa-nutrition/gallery/achievements/award1",
+  "title": "Annual Award Ceremony",
+  "description": "Students receiving the excellence award at the 2026 annual function.",
+  "createdAt": { "$date": "2025-07-01T09:05:00.000Z" },
+  "updatedAt": { "$date": "2025-07-01T09:05:00.000Z" }
+}
+```
+
+---
+
 ## contacts
 
 ```json

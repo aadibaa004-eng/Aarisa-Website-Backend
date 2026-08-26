@@ -37,7 +37,15 @@ arisa-nutrition-backend/
 │   │   │   └── [id]/route.ts
 │   │   ├── gallery/
 │   │   │   ├── route.ts
-│   │   │   └── [id]/route.ts
+│   │   │   ├── [id]/route.ts
+│   │   │   ├── categories/
+│   │   │   │   ├── route.ts
+│   │   │   │   └── [id]/
+│   │   │   │       ├── route.ts
+│   │   │   │       ├── status/route.ts
+│   │   │   │       └── images/route.ts
+│   │   │   └── images/
+│   │   │       └── [id]/route.ts
 │   │   ├── contact/
 │   │   │   ├── route.ts
 │   │   │   └── [id]/route.ts
@@ -50,6 +58,7 @@ arisa-nutrition-backend/
 │   ├── jwt.ts          # JWT sign / verify (jose)
 │   ├── auth.ts         # Server-side auth helpers
 │   ├── cloudinary.ts   # Cloudinary upload helpers
+│   ├── gallery.ts      # Gallery category service helpers
 │   └── resend.ts       # Email template + send helper
 ├── middleware/
 │   └── withAuth.ts     # HOF route auth wrapper
@@ -59,6 +68,8 @@ arisa-nutrition-backend/
 │   ├── Blog.ts
 │   ├── Review.ts
 │   ├── Gallery.ts
+│   ├── GalleryCategory.ts
+│   ├── GalleryImage.ts
 │   └── Contact.ts
 ├── types/
 │   └── index.ts
@@ -70,6 +81,7 @@ arisa-nutrition-backend/
 │   ├── blog.ts
 │   ├── review.ts
 │   ├── gallery.ts
+│   ├── galleryCategory.ts
 │   └── contact.ts
 ├── .env.example
 ├── .env.local          # ← fill this in (never commit)
@@ -208,6 +220,16 @@ See [docs/API.md](docs/API.md) for the full reference.
 | POST | `/api/gallery` | ✅ | Add gallery item |
 | PUT | `/api/gallery/:id` | ✅ | Update gallery item |
 | DELETE | `/api/gallery/:id` | ✅ | Delete gallery item |
+| GET | `/api/gallery/categories` | ❌ | List active categories (admins see all) |
+| GET | `/api/gallery/categories/:id` | ❌ | Single category (+ `?include_images=true`) |
+| POST | `/api/gallery/categories` | ✅ | Create category (auto-slug) |
+| PUT | `/api/gallery/categories/:id` | ✅ | Update category |
+| PATCH | `/api/gallery/categories/:id/status` | ✅ | Enable/disable category |
+| DELETE | `/api/gallery/categories/:id` | ✅ | Delete category (cascade) |
+| GET | `/api/gallery/categories/:id/images` | ❌ | List category images |
+| POST | `/api/gallery/categories/:id/images` | ✅ | Multi-image upload to category |
+| PATCH | `/api/gallery/images/:id` | ✅ | Update image title/description |
+| DELETE | `/api/gallery/images/:id` | ✅ | Delete single image |
 | POST | `/api/contact` | ❌ | Submit contact form |
 | GET | `/api/contact` | ✅ | List contact submissions |
 | PATCH | `/api/contact/:id` | ✅ | Update contact status |

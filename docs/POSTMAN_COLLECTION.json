@@ -10,11 +10,13 @@
     { "key": "blog_id", "value": "", "type": "string" },
     { "key": "review_id", "value": "", "type": "string" },
     { "key": "gallery_id", "value": "", "type": "string" },
+    { "key": "category_id", "value": "", "type": "string" },
+    { "key": "category_image_id", "value": "", "type": "string" },
     { "key": "contact_id", "value": "", "type": "string" }
   ],
   "item": [
     {
-      "name": "Auth",
+      "name": "Auth", 
       "item": [
         {
           "name": "Login",
@@ -200,6 +202,137 @@
             "method": "DELETE",
             "header": [],
             "url": { "raw": "{{base_url}}/api/gallery/{{gallery_id}}", "host": ["{{base_url}}"], "path": ["api", "gallery", "{{gallery_id}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Gallery Categories",
+      "item": [
+        {
+          "name": "List Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/gallery/categories",
+              "host": ["{{base_url}}"],
+              "path": ["api", "gallery", "categories"],
+              "query": [{ "key": "is_active", "value": "true", "disabled": true }]
+            }
+          }
+        },
+        {
+          "name": "Get Category by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/gallery/categories/{{category_id}}?include_images=true",
+              "host": ["{{base_url}}"],
+              "path": ["api", "gallery", "categories", "{{category_id}}"],
+              "query": [{ "key": "include_images", "value": "true" }]
+            }
+          }
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Achievements\",\n  \"is_active\": true\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/gallery/categories", "host": ["{{base_url}}"], "path": ["api", "gallery", "categories"] }
+          }
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Student Activities\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/gallery/categories/{{category_id}}", "host": ["{{base_url}}"], "path": ["api", "gallery", "categories", "{{category_id}}"] }
+          }
+        },
+        {
+          "name": "Enable Category",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_active\": true\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/gallery/categories/{{category_id}}/status", "host": ["{{base_url}}"], "path": ["api", "gallery", "categories", "{{category_id}}", "status"] }
+          }
+        },
+        {
+          "name": "Disable Category",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_active\": false\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/gallery/categories/{{category_id}}/status", "host": ["{{base_url}}"], "path": ["api", "gallery", "categories", "{{category_id}}", "status"] }
+          }
+        },
+        {
+          "name": "Delete Category (Cascade)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{base_url}}/api/gallery/categories/{{category_id}}", "host": ["{{base_url}}"], "path": ["api", "gallery", "categories", "{{category_id}}"] }
+          }
+        },
+        {
+          "name": "List Category Images",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/api/gallery/categories/{{category_id}}/images", "host": ["{{base_url}}"], "path": ["api", "gallery", "categories", "{{category_id}}", "images"] }
+          }
+        },
+        {
+          "name": "Upload Category Images",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "images", "type": "file", "src": [] },
+                { "key": "metadata", "value": "[{\"title\": \"Award Ceremony\", \"description\": \"Annual function 2026\"}]", "type": "text", "disabled": true },
+                { "key": "title", "value": "Award Ceremony", "type": "text", "disabled": true }
+              ]
+            },
+            "url": { "raw": "{{base_url}}/api/gallery/categories/{{category_id}}/images", "host": ["{{base_url}}"], "path": ["api", "gallery", "categories", "{{category_id}}", "images"] }
+          }
+        },
+        {
+          "name": "Update Image Details",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Award Ceremony\",\n  \"description\": \"Students receiving the excellence award at the annual function.\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/gallery/images/{{category_image_id}}", "host": ["{{base_url}}"], "path": ["api", "gallery", "images", "{{category_image_id}}"] }
+          }
+        },
+        {
+          "name": "Delete Category Image",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{base_url}}/api/gallery/images/{{category_image_id}}", "host": ["{{base_url}}"], "path": ["api", "gallery", "images", "{{category_image_id}}"] }
           }
         }
       ]
