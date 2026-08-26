@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import mongoose from "mongoose";
 import { connectDB } from "@/lib/db";
 import GalleryImage, { IGalleryImage } from "@/models/GalleryImage";
 import { uploadImage } from "@/lib/cloudinary";
