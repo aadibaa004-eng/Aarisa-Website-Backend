@@ -12,6 +12,10 @@ const PUBLIC_PATTERNS: Array<{ methods: string[]; pattern: RegExp }> = [
   { methods: ["GET", "HEAD"], pattern: /^\/api\/blogs(\/[^/]+)?$/ },
   // Public read access to reviews
   { methods: ["GET", "HEAD"], pattern: /^\/api\/reviews$/ },
+  // Public read access to all review screenshots
+  { methods: ["GET", "HEAD"], pattern: /^\/api\/reviews\/screenshots$/ },
+  // Public read access to per-review screenshots
+  { methods: ["GET", "HEAD"], pattern: /^\/api\/reviews\/[^/]+\/screenshots$/ },
   // Public read access to gallery
   { methods: ["GET", "HEAD"], pattern: /^\/api\/gallery$/ },
   // Public read access to gallery categories (list + single) and their images.

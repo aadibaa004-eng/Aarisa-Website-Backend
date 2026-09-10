@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import { connectDB } from "@/lib/db";
 import Review from "@/models/Review";
 import { updateReviewSchema } from "@/validations/review";
+import { deleteReviewScreenshots } from "@/lib/review";
 import {
   successResponse,
   errorResponse,
@@ -67,6 +68,8 @@ export async function DELETE(
     if (!review) {
       return notFoundResponse("Review not found");
     }
+
+    await deleteReviewScreenshots(id);
 
     return successResponse(null, "Review deleted successfully");
   } catch {
